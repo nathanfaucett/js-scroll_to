@@ -1,4 +1,4 @@
-scroll_to [![Build Status](https://travis-ci.org/nathanfaucett/scroll_to.svg?branch=master)](https://travis-ci.org/nathanfaucett/scroll_to)
+scroll_to
 =======
 
 easing scroll to function
