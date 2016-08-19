@@ -34,8 +34,8 @@ function scroll() {
         documentElement = document.documentElement || document.body;
 
     return scrollTo(
-        documentElement.scrollLeft,
-        documentElement.scrollTop,
+        window.pageXOffset || (documentElement.scrollLeft - documentElement.clientLeft),
+        window.pageYOffset || (documentElement.scrollTop - documentElement.clientTop),
         domDimensions.left(div),
         domDimensions.top(div),
         1000,
@@ -46,7 +46,6 @@ function scroll() {
         }
     );
 }
-window.doScroll = scroll;
 
 function runTest() {
     createElements();
@@ -58,5 +57,7 @@ function run(startX, startY) {
     setTimeout(runTest, 50/3);
 }
 
-
 run(0, 0);
+
+
+window.run = run;

@@ -76,7 +76,7 @@
         }
     };
 
-    global["cwbFtqhm-VScN-4BPx-Agcm-9zY0XzwfYHIJC"] = function(asyncDependencies) {
+    global["CpxFb8DF-eIba-4itl-paWW-7e7LCoQSHhWM6"] = function(asyncDependencies) {
         var i = -1,
             il = asyncDependencies.length - 1,
             dependency, index;
@@ -143,8 +143,8 @@ function scroll() {
         documentElement = document.documentElement || document.body;
 
     return scrollTo(
-        documentElement.scrollLeft,
-        documentElement.scrollTop,
+        window.pageXOffset || (documentElement.scrollLeft - documentElement.clientLeft),
+        window.pageYOffset || (documentElement.scrollTop - documentElement.clientTop),
         domDimensions.left(div),
         domDimensions.top(div),
         1000,
@@ -155,7 +155,6 @@ function scroll() {
         }
     );
 }
-window.doScroll = scroll;
 
 function runTest() {
     createElements();
@@ -167,8 +166,10 @@ function run(startX, startY) {
     setTimeout(runTest, 50/3);
 }
 
-
 run(0, 0);
+
+
+window.run = run;
 
 },
 function(require, exports, module, undefined, global) {
@@ -597,10 +598,9 @@ domDimensions.outerHeight = function(node) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/scroll_to@0.0.2/src/index.js-=@*/
+/*@=-@nathanfaucett/scroll_to@0.0.3/src/index.js-=@*/
 var once = require(18),
-    clamp = require(19),
-    requestAnimationFrame = require(20);
+    requestAnimationFrame = require(19);
 
 
 module.exports = scrollTo;
@@ -624,8 +624,8 @@ function scrollTo(startX, startY, endX, endY, duration, easingFn, scrollToFn, ca
         startTime = startTime || ms;
         deltaTime = ms - startTime;
 
-        currentX = clamp(easingFn(deltaX / totalDeltaX, deltaTime, startX, endX, duration), startX, endX);
-        currentY = clamp(easingFn(deltaY / totalDeltaY, deltaTime, startY, endY, duration), startY, endY);
+        currentX = easingFn(deltaX / totalDeltaX, deltaTime, startX, endX, duration);
+        currentY = easingFn(deltaY / totalDeltaY, deltaTime, startY, endY, duration);
 
         if (deltaTime < duration) {
             scrollToFn(currentX, currentY);
@@ -919,7 +919,7 @@ function capitalizeString(string) {
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/once@0.0.1/src/index.js-=@*/
-var apply = require(21);
+var apply = require(20);
 
 
 module.exports = once;
@@ -940,26 +940,10 @@ function once(fn, thisArg) {
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/clamp@0.0.1/src/index.js-=@*/
-module.exports = clamp;
-
-
-function clamp(x, min, max) {
-    if (x < min) {
-        return min;
-    } else if (x > max) {
-        return max;
-    } else {
-        return x;
-    }
-}
-
-},
-function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/request_animation_frame@0.0.2/src/index.js-=@*/
 var environment = require(10),
-    emptyFunction = require(22),
-    now = require(23);
+    emptyFunction = require(21),
+    now = require(22);
 
 
 var window = environment.window,

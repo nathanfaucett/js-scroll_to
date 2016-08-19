@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/scroll_to",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "easing scroll to function",
   "repository": {
     "type": "git",
@@ -26,7 +26,6 @@
     "grunt-jsbeautifier": "^0.2.13"
   },
   "dependencies": {
-    "@nathanfaucett/clamp": "0.0.1",
     "@nathanfaucett/once": "0.0.1",
     "@nathanfaucett/request_animation_frame": "0.0.2"
   }

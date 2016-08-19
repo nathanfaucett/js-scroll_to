@@ -1,5 +1,4 @@
 var once = require("@nathanfaucett/once"),
-    clamp = require("@nathanfaucett/clamp"),
     requestAnimationFrame = require("@nathanfaucett/request_animation_frame");
 
 
@@ -24,8 +23,8 @@ function scrollTo(startX, startY, endX, endY, duration, easingFn, scrollToFn, ca
         startTime = startTime || ms;
         deltaTime = ms - startTime;
 
-        currentX = clamp(easingFn(deltaX / totalDeltaX, deltaTime, startX, endX, duration), startX, endX);
-        currentY = clamp(easingFn(deltaY / totalDeltaY, deltaTime, startY, endY, duration), startY, endY);
+        currentX = easingFn(deltaX / totalDeltaX, deltaTime, startX, endX, duration);
+        currentY = easingFn(deltaY / totalDeltaY, deltaTime, startY, endY, duration);
 
         if (deltaTime < duration) {
             scrollToFn(currentX, currentY);
