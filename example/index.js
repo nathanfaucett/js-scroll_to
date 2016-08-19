@@ -76,7 +76,7 @@
         }
     };
 
-    global["suZt7ikM-zhI1-4yyP-N0Js-3ULnwfr2l1u4s"] = function(asyncDependencies) {
+    global["cwbFtqhm-VScN-4BPx-Agcm-9zY0XzwfYHIJC"] = function(asyncDependencies) {
         var i = -1,
             il = asyncDependencies.length - 1,
             dependency, index;
@@ -108,7 +108,8 @@
 function(require, exports, module, undefined, global) {
 /*@=-/var/www/html/node/_animation/scroll_to/example/src/index.js-=@*/
 var easing = require(1),
-    scrollTo = require(2);
+    domDimensions = require(2),
+    scrollTo = require(3);
 
 
 var innerWidth = window.innerWidth,
@@ -138,13 +139,14 @@ function createElements() {
 }
 
 function scroll() {
-    var div = document.getElementById("target");
+    var div = document.getElementById("target"),
+        documentElement = document.documentElement || document.body;
 
     return scrollTo(
-        window.scrollX,
-        window.scrollY,
-        div.offsetLeft,
-        div.offsetTop,
+        documentElement.scrollLeft,
+        documentElement.scrollTop,
+        domDimensions.left(div),
+        domDimensions.top(div),
         1000,
         easing.inOutQuad,
         window.scrollTo,
@@ -162,16 +164,16 @@ function runTest() {
 
 function run(startX, startY) {
     window.scrollTo(startX, startY);
-    setTimeout(runTest);
+    setTimeout(runTest, 50/3);
 }
 
 
-run(((innerWidth * 2) - 128), 0);
+run(0, 0);
 
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/easing@0.0.1/src/index.js-=@*/
-var isNullOrUndefined = require(3);
+var isNullOrUndefined = require(4);
 
 
 var easing = module.exports;
@@ -460,10 +462,145 @@ easing.inOutBounce = inOutBounce;
 
 },
 function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/scroll_to@0.0.1/src/index.js-=@*/
-var once = require(6),
-    clamp = require(7),
-    requestAnimationFrame = require(8);
+/*@=-@nathanfaucett/dom_dimensions@0.0.1/src/index.js-=@*/
+var getCurrentStyle = require(7),
+    isElement = require(8);
+
+
+module.exports = domDimensions;
+
+
+function domDimensions(node) {
+    var dimensions = new Dimensions(),
+        clientRect;
+
+    if (isElement(node)) {
+        clientRect = node.getBoundingClientRect();
+
+        dimensions.top = clientRect.top;
+        dimensions.right = clientRect.left + node.offsetWidth;
+        dimensions.bottom = clientRect.top + node.offsetHeight;
+        dimensions.left = clientRect.left;
+        dimensions.width = dimensions.right - dimensions.left;
+        dimensions.height = dimensions.bottom - dimensions.top;
+
+        return dimensions;
+    } else {
+        return dimensions;
+    }
+}
+
+function Dimensions() {
+    this.top = 0;
+    this.right = 0;
+    this.bottom = 0;
+    this.left = 0;
+    this.width = 0;
+    this.height = 0;
+}
+
+domDimensions.top = function(node) {
+    if (isElement(node)) {
+        return node.getBoundingClientRect().top;
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.right = function(node) {
+    if (isElement(node)) {
+        return domDimensions.left(node) + node.offsetWidth;
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.bottom = function(node) {
+    if (isElement(node)) {
+        return domDimensions.top(node) + node.offsetHeight;
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.left = function(node) {
+    if (isElement(node)) {
+        return node.getBoundingClientRect().left;
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.width = function(node) {
+    if (isElement(node)) {
+        return domDimensions.right(node) - domDimensions.left(node);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.height = function(node) {
+    if (isElement(node)) {
+        return domDimensions.bottom(node) - domDimensions.top(node);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.marginTop = function(node) {
+    if (isElement(node)) {
+        return parseInt(getCurrentStyle(node, "marginTop"), 10);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.marginRight = function(node) {
+    if (isElement(node)) {
+        return parseInt(getCurrentStyle(node, "marginRight"), 10);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.marginBottom = function(node) {
+    if (isElement(node)) {
+        return parseInt(getCurrentStyle(node, "marginRight"), 10);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.marginLeft = function(node) {
+    if (isElement(node)) {
+        return parseInt(getCurrentStyle(node, "marginLeft"), 10);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.outerWidth = function(node) {
+    if (isElement(node)) {
+        return domDimensions.width(node) + domDimensions.marginLeft(node) + domDimensions.marginRight(node);
+    } else {
+        return 0;
+    }
+};
+
+domDimensions.outerHeight = function(node) {
+    if (isElement(node)) {
+        return domDimensions.height(node) + domDimensions.marginTop(node) + domDimensions.marginBottom(node);
+    } else {
+        return 0;
+    }
+};
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/scroll_to@0.0.2/src/index.js-=@*/
+var once = require(18),
+    clamp = require(19),
+    requestAnimationFrame = require(20);
 
 
 module.exports = scrollTo;
@@ -512,8 +649,8 @@ function scrollTo(startX, startY, endX, endY, duration, easingFn, scrollToFn, ca
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/is_null_or_undefined@0.0.1/src/index.js-=@*/
-var isNull = require(4),
-    isUndefined = require(5);
+var isNull = require(5),
+    isUndefined = require(6);
 
 
 module.exports = isNullOrUndefined;
@@ -557,8 +694,232 @@ function isUndefined(value) {
 
 },
 function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/get_current_style@0.0.1/src/index.js-=@*/
+var supports = require(9),
+    environment = require(10),
+    isElement = require(8),
+    isString = require(11),
+    camelize = require(12);
+
+
+var baseGetCurrentStyles;
+
+
+module.exports = getCurrentStyle;
+
+
+function getCurrentStyle(node, style) {
+    if (isElement(node)) {
+        if (isString(style)) {
+            return baseGetCurrentStyles(node)[camelize(style)] || "";
+        } else {
+            return baseGetCurrentStyles(node);
+        }
+    } else {
+        if (isString(style)) {
+            return "";
+        } else {
+            return null;
+        }
+    }
+}
+
+if (supports.dom && environment.document.defaultView) {
+    baseGetCurrentStyles = function(node) {
+        return node.ownerDocument.defaultView.getComputedStyle(node, "");
+    };
+} else {
+    baseGetCurrentStyles = function(node) {
+        if (node.currentStyle) {
+            return node.currentStyle;
+        } else {
+            return node.style;
+        }
+    };
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/is_element@0.0.1/src/index.js-=@*/
+var isNode = require(13);
+
+
+module.exports = isElement;
+
+
+function isElement(value) {
+    return isNode(value) && value.nodeType === 1;
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/supports@0.0.1/src/index.js-=@*/
+var environment = require(10);
+
+
+var supports = module.exports;
+
+
+supports.dom = !!(typeof(window) !== "undefined" && window.document && window.document.createElement);
+supports.workers = typeof(Worker) !== "undefined";
+
+supports.eventListeners = supports.dom && !!environment.window.addEventListener;
+supports.attachEvents = supports.dom && !!environment.window.attachEvent;
+
+supports.viewport = supports.dom && !!environment.window.screen;
+supports.touch = supports.dom && "ontouchstart" in environment.window;
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/environment@0.0.1/src/index.js-=@*/
+var environment = exports,
+
+    hasWindow = typeof(window) !== "undefined",
+    userAgent = hasWindow ? window.navigator.userAgent : "";
+
+
+environment.worker = typeof(importScripts) !== "undefined";
+
+environment.browser = environment.worker || !!(
+    hasWindow &&
+    typeof(navigator) !== "undefined" &&
+    window.document
+);
+
+environment.node = !environment.worker && !environment.browser;
+
+environment.mobile = environment.browser && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
+
+environment.window = (
+    hasWindow ? window :
+    typeof(global) !== "undefined" ? global :
+    typeof(self) !== "undefined" ? self : {}
+);
+
+environment.pixelRatio = environment.window.devicePixelRatio || 1;
+
+environment.document = typeof(document) !== "undefined" ? document : {};
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/is_string@0.0.1/src/index.js-=@*/
+module.exports = isString;
+
+
+function isString(value) {
+    return typeof(value) === "string" || false;
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/camelize@0.0.1/src/index.js-=@*/
+var reInflect = require(16),
+    capitalizeString = require(17);
+
+
+module.exports = camelize;
+
+
+function camelize(string, lowFirstLetter) {
+    var parts, part, i, il;
+
+    lowFirstLetter = lowFirstLetter !== false;
+    parts = string.match(reInflect);
+    i = lowFirstLetter ? 0 : -1;
+    il = parts.length - 1;
+
+    while (i++ < il) {
+        parts[i] = capitalizeString(parts[i]);
+    }
+
+    if (lowFirstLetter && (part = parts[0])) {
+        parts[0] = part.charAt(0).toLowerCase() + part.slice(1);
+    }
+
+    return parts.join("");
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/is_node@0.0.1/src/index.js-=@*/
+var isString = require(11),
+    isNullOrUndefined = require(4),
+    isNumber = require(14),
+    isFunction = require(15);
+
+
+var isNode;
+
+
+if (typeof(Node) !== "undefined" && isFunction(Node)) {
+    isNode = function isNode(value) {
+        return value instanceof Node;
+    };
+} else {
+    isNode = function isNode(value) {
+        return (!isNullOrUndefined(value) &&
+            isNumber(value.nodeType) &&
+            isString(value.nodeName)
+        );
+    };
+}
+
+
+module.exports = isNode;
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/is_number@0.0.1/src/index.js-=@*/
+module.exports = isNumber;
+
+
+function isNumber(value) {
+    return typeof(value) === "number" || false;
+}
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/is_function@0.0.1/src/index.js-=@*/
+var objectToString = Object.prototype.toString,
+    isFunction;
+
+
+if (objectToString.call(function() {}) === "[object Object]") {
+    isFunction = function isFunction(value) {
+        return value instanceof Function;
+    };
+} else if (typeof(/./) === "function" || (typeof(Uint8Array) !== "undefined" && typeof(Uint8Array) !== "function")) {
+    isFunction = function isFunction(value) {
+        return objectToString.call(value) === "[object Function]";
+    };
+} else {
+    isFunction = function isFunction(value) {
+        return typeof(value) === "function" || false;
+    };
+}
+
+
+module.exports = isFunction;
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/re_inflect@0.0.1/src/index.js-=@*/
+module.exports = /[^A-Z-_ ]+|[A-Z][^A-Z-_ ]+|[^a-z-_ ]+/g;
+
+},
+function(require, exports, module, undefined, global) {
+/*@=-@nathanfaucett/capitalize_string@0.0.1/src/index.js-=@*/
+module.exports = capitalizeString;
+
+
+function capitalizeString(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+},
+function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/once@0.0.1/src/index.js-=@*/
-var apply = require(9);
+var apply = require(21);
 
 
 module.exports = once;
@@ -597,8 +958,8 @@ function clamp(x, min, max) {
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/request_animation_frame@0.0.2/src/index.js-=@*/
 var environment = require(10),
-    emptyFunction = require(11),
-    now = require(12);
+    emptyFunction = require(22),
+    now = require(23);
 
 
 var window = environment.window,
@@ -673,7 +1034,7 @@ module.exports = requestAnimationFrame;
 },
 function(require, exports, module, undefined, global) {
 /*@=-@nathanfaucett/apply@0.0.1/src/index.js-=@*/
-var isNullOrUndefined = require(3);
+var isNullOrUndefined = require(4);
 
 
 module.exports = apply;
@@ -724,37 +1085,6 @@ function applyThisArg(fn, args, thisArg) {
             return fn.apply(thisArg, args);
     }
 }
-
-},
-function(require, exports, module, undefined, global) {
-/*@=-@nathanfaucett/environment@0.0.1/src/index.js-=@*/
-var environment = exports,
-
-    hasWindow = typeof(window) !== "undefined",
-    userAgent = hasWindow ? window.navigator.userAgent : "";
-
-
-environment.worker = typeof(importScripts) !== "undefined";
-
-environment.browser = environment.worker || !!(
-    hasWindow &&
-    typeof(navigator) !== "undefined" &&
-    window.document
-);
-
-environment.node = !environment.worker && !environment.browser;
-
-environment.mobile = environment.browser && /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase());
-
-environment.window = (
-    hasWindow ? window :
-    typeof(global) !== "undefined" ? global :
-    typeof(self) !== "undefined" ? self : {}
-);
-
-environment.pixelRatio = environment.window.devicePixelRatio || 1;
-
-environment.document = typeof(document) !== "undefined" ? document : {};
 
 },
 function(require, exports, module, undefined, global) {

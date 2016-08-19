@@ -1,4 +1,5 @@
 var easing = require("@nathanfaucett/easing"),
+    domDimensions = require("@nathanfaucett/dom_dimensions"),
     scrollTo = require("../..");
 
 
@@ -29,13 +30,14 @@ function createElements() {
 }
 
 function scroll() {
-    var div = document.getElementById("target");
+    var div = document.getElementById("target"),
+        documentElement = document.documentElement || document.body;
 
     return scrollTo(
-        window.scrollX,
-        window.scrollY,
-        div.offsetLeft,
-        div.offsetTop,
+        documentElement.scrollLeft,
+        documentElement.scrollTop,
+        domDimensions.left(div),
+        domDimensions.top(div),
         1000,
         easing.inOutQuad,
         window.scrollTo,
@@ -53,8 +55,8 @@ function runTest() {
 
 function run(startX, startY) {
     window.scrollTo(startX, startY);
-    setTimeout(runTest);
+    setTimeout(runTest, 50/3);
 }
 
 
-run(((innerWidth * 2) - 128), 0);
+run(0, 0);

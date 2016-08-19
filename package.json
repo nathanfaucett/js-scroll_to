@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/scroll_to",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "easing scroll to function",
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "readmeFilename": "README.md",
   "devDependencies": {
     "@nathanfaucett/comn": "0.0.5",
+    "@nathanfaucett/dom_dimensions": "0.0.1",
     "@nathanfaucett/easing": "^0.0.1",
     "grunt": "^1.0.1",
     "grunt-contrib-jshint": "^1.0.0",
