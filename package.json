@@ -1,6 +1,6 @@
 {
   "name": "@nathanfaucett/scroll_to",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "easing scroll to function",
   "repository": {
     "type": "git",
@@ -18,7 +18,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "@nathanfaucett/comn": "0.0.5",
+    "@nathanfaucett/comn": "^0.0.11",
     "@nathanfaucett/dom_dimensions": "0.0.1",
     "@nathanfaucett/easing": "^0.0.1",
     "grunt": "^1.0.1",
@@ -26,7 +26,7 @@
     "grunt-jsbeautifier": "^0.2.13"
   },
   "dependencies": {
-    "@nathanfaucett/once": "0.0.1",
-    "@nathanfaucett/request_animation_frame": "0.0.2"
+    "@nathanfaucett/once": "^0.0.1",
+    "@nathanfaucett/request_animation_frame": "^0.0.4"
   }
 }
